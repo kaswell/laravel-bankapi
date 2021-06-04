@@ -4,6 +4,7 @@ namespace Kaswell\Bank;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Bank
@@ -22,9 +23,9 @@ class Bank
     private $result = EMPTY_ARRAY;
 
     /**
-     * @var array $errors
+     * @var Errors $errors
      */
-    private $errors = [];
+    private $errors;
 
     /**
      * @var \Illuminate\Http\Client\Response $response
@@ -32,20 +33,43 @@ class Bank
     private $response;
 
     /**
-     * @param array $error
+     * Bank constructor.
      * @return void
      */
-    protected function setErrors(array $error)
+    public function __construct()
     {
-        $this->errors[] = $error;
+        $this->errors = Errors::getInstance();
     }
 
     /**
-     * @return array
+     * Bank destructor.
+     * @return void
      */
-    public function getErrors(): array
+    public function __destruct()
     {
-        return $this->errors;
+        if ($this->errors->empty()) Log::error('Bank API Errors', $this->errors->get());
+    }
+
+    /**
+     * @param $date
+     * @return string
+     */
+    protected function parseDate($date)
+    {
+        return Carbon::parse($date)->format("Y-m-d");
+    }
+
+    /**
+     * @param $path
+     * @return void
+     */
+    protected function send($path)
+    {
+        try {
+            $this->response = Http::retry(1, 5)->baseUrl(self::HOST)->get($path);
+        } catch (\Exception $exception) {
+            $this->errors->add(['exception' => $exception]);
+        }
     }
 
     /**
@@ -64,7 +88,7 @@ class Bank
         $this->send('currencies');
 
         if ($this->response->ok()) $this->result = $this->response->json();
-        if ($this->response->failed()) $this->setErrors(['code' => $this->response->status()]);
+        if ($this->response->failed()) $this->errors->add(['code' => $this->response->status()]);
 
         return $this->result;
     }
@@ -96,7 +120,7 @@ class Bank
         $this->send('currencies/' . $cur_id);
 
         if ($this->response->ok()) $this->result = $this->response->json();
-        if ($this->response->failed()) $this->setErrors(['code' => $this->response->status()]);
+        if ($this->response->failed()) $this->errors->add(['code' => $this->response->status()]);
 
         return $this->result;
     }
@@ -117,7 +141,7 @@ class Bank
         $this->send($path);
 
         if ($this->response->successful()) $this->result = $this->response->json();
-        if ($this->response->failed()) $this->setErrors(['code' => $this->response->status()]);
+        if ($this->response->failed()) $this->errors->add(['code' => $this->response->status()]);
 
         return $this->result;
     }
@@ -147,30 +171,8 @@ class Bank
         $this->send($path);
 
         if ($this->response->successful()) $this->result = $this->response->json();
-        if ($this->response->failed()) $this->setErrors(['code' => $this->response->status()]);
+        if ($this->response->failed()) $this->errors->add(['code' => $this->response->status()]);
 
         return $this->result;
-    }
-
-    /**
-     * @param $path
-     * @return void
-     */
-    protected function send($path)
-    {
-        try {
-            $this->response = Http::retry(1, 5)->baseUrl(self::HOST)->get($path);
-        } catch (\Exception $exception) {
-            $this->setErrors(['exception' => $exception]);
-        }
-    }
-
-    /**
-     * @param $date
-     * @return string
-     */
-    protected function parseDate($date)
-    {
-        return Carbon::parse($date)->format("Y-m-d");
     }
 }

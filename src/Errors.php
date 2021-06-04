@@ -27,7 +27,8 @@ class Errors
     /**
      * @return void
      */
-    private function __clone(){
+    private function __clone()
+    {
         if (is_null(static::$instance) || !(static::$instance instanceof Errors)) {
             static::$instance = new static;
         }
@@ -37,7 +38,8 @@ class Errors
      * Errors constructor.
      * @return void
      */
-    private function __construct(){
+    private function __construct()
+    {
         if (is_null(static::$instance) || !(static::$instance instanceof Errors)) {
             static::$instance = new static;
         }
@@ -51,8 +53,9 @@ class Errors
 
     /**
      * @param array $error
+     * @return void
      */
-    public function set(array $error)
+    public function add(array $error)
     {
         $this->errors[] = $error;
     }
@@ -60,8 +63,17 @@ class Errors
     /**
      * @return array
      */
-    public function get()
+    public function get(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * @return bool
+     */
+    public function empty(): bool
+    {
+        return !(count($this->errors) > 0);
+
     }
 }
