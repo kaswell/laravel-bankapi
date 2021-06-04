@@ -1,0 +1,46 @@
+{
+  "name": "kaswell/laravel-bankapi",
+  "description": "description",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aliaksandr Kasatkin",
+      "email": "a.kasatkin@nonium.by",
+      "homepage": "https://nonium.by",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">7.3",
+    "laravel/framework": ">7.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^9.3"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Kaswell\\Bank\\": "src/"
+    },
+    "files": [
+      "src/constants.php"
+    ]
+  },
+  "prefer-stable": true,
+  "minimum-stability": "dev",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "BankServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "composer dump-autoload --optimize"
+    ]
+  }
+}
