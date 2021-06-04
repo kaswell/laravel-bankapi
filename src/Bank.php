@@ -35,7 +35,7 @@ class Bank
      * @param array $error
      * @return void
      */
-    private function setErrors(array $error)
+    protected function setErrors(array $error)
     {
         $this->errors = array_merge($this->errors, [$error]);
     }
