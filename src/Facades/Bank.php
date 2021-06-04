@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @package Kaswell\Bank\Facades
  * @method static array getCurrencies()
  * @method static array getCurrencyById(int $cur_id = ZERO)
- * @method static array getCurrenciesRates($date = null, int $periodicity = 0, int $paramMode = 0)
+ * @method static array getCurrenciesRates($date = null, int $periodicity = 0)
  * @method static array getCurrencyRate($cur_id, $date = null, int $periodicity = 0, int $paramMode = 0)
  */
 class Bank extends Facade

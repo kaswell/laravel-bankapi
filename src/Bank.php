@@ -105,16 +105,14 @@ class Bank
     /**
      * @param string|null $date
      * @param int $periodicity
-     * @param int $paramMode
      * @return array
      */
-    public function getCurrenciesRates($date = null, int $periodicity = 0, int $paramMode = 0): array
+    public function getCurrenciesRates($date = null, int $periodicity = 0): array
     {
         $path = 'rates?ondate=';
         $path .= (is_null($date)) ? $this->parseDate(now()) : $this->parseDate($date);
 
         if (in_array($periodicity, [0, 1])) $path .= '&periodicity=' . $periodicity;
-        if (in_array($paramMode, [0, 1, 2])) $path .= '&parammode=' . $paramMode;
 
         $this->send($path);
 
