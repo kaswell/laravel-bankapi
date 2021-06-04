@@ -94,7 +94,8 @@ class Bank
      * @return array
      *
      * Cur_ID – внутренний код
-     * Cur_ParentID – этот код используется для связи, при изменениях наименования, количества единиц к которому устанавливается курс белорусского рубля, буквенного, цифрового кодов и т.д. фактически одной и той же валюты*.
+     * Cur_ParentID – этот код используется для связи, при изменениях наименования, количества единиц к которому устанавливается курс белорусского рубля,
+     *                буквенного, цифрового кодов и т.д. фактически одной и той же валюты*.
      * Cur_Code – цифровой код
      * Cur_Abbreviation – буквенный код
      * Cur_Name – наименование валюты на русском языке
@@ -130,7 +131,7 @@ class Bank
     public function getCurrenciesRates($date = null, int $periodicity = 0): array
     {
         $path = 'rates?ondate=';
-        $path .= (is_null($date)) ? $this->parseDate(now()) : $this->parseDate($date);
+        $path .= (is_null($date)) ? $this->parseDate(Carbon::now()) : $this->parseDate($date);
 
         if (in_array($periodicity, [0, 1])) $path .= '&periodicity=' . $periodicity;
 
@@ -159,7 +160,7 @@ class Bank
     public function getCurrencyRate($cur_id, $date = null, int $periodicity = 0, int $paramMode = 0): array
     {
         $path = 'rates/' . $cur_id . '?ondate=';
-        $path .= (is_null($date)) ? $this->parseDate(now()) : $this->parseDate($date);
+        $path .= (is_null($date)) ? $this->parseDate(Carbon::now()) : $this->parseDate($date);
 
         if (in_array($periodicity, [0, 1])) $path .= '&periodicity=' . $periodicity;
         if (in_array($paramMode, [0, 1, 2])) $path .= '&parammode=' . $paramMode;
