@@ -37,7 +37,7 @@ class Bank
      */
     protected function setErrors(array $error)
     {
-        $this->errors = array_merge($this->errors, [$error]);
+        $this->errors[] = $error;
     }
 
     /**
