@@ -3,6 +3,7 @@
 namespace Kaswell\Bank;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -12,11 +13,6 @@ use Illuminate\Support\Facades\Log;
  */
 class Bank
 {
-    /**
-     * @var string
-     */
-    private const HOST = 'https://www.nbrb.by/api/exrates/';
-
     /**
      * @var array $result
      */
@@ -66,7 +62,7 @@ class Bank
     protected function send($path)
     {
         try {
-            $this->response = Http::retry(1, 5)->baseUrl(self::HOST)->get($path);
+            $this->response = Http::retry(1, 5)->baseUrl(Config::get('bank.host'))->get($path);
         } catch (\Exception $exception) {
             $this->errors->add(['exception' => $exception]);
         }

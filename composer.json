@@ -13,7 +13,8 @@
   "require": {
     "php": ">7.3",
     "illuminate/support": ">7.0",
-    "illuminate/http": ">7.0"
+    "illuminate/http": ">7.0",
+    "illuminate/config": "*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
