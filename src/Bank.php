@@ -2,6 +2,7 @@
 
 namespace Kaswell\Bank;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -30,6 +31,14 @@ class Bank
      */
     private $response;
 
+    /**
+     * @param array $error
+     * @return void
+     */
+    private function setErrors(array $error)
+    {
+        $this->errors = array_merge($this->errors, [$error]);
+    }
 
     /**
      * @return array
@@ -52,7 +61,7 @@ class Bank
      * @param int $cur_id
      * @return array
      */
-    public function getCurrency(int $cur_id = ZERO, $date = null): array
+    public function getCurrency(int $cur_id = ZERO): array
     {
         $path = 'currencies';
         if ($cur_id !== ZERO) $path .= '/' . $cur_id;
@@ -63,11 +72,7 @@ class Bank
             $this->result = $this->response->json();
         }
         if ($this->response->failed()) {
-            $this->errors = array_merge($this->errors, [
-                [
-                    'code' => $this->response->status(),
-                ]
-            ]);
+            $this->setErrors(['code' => $this->response->status()]);
         }
 
         return $this->result;
@@ -75,14 +80,14 @@ class Bank
 
     /**
      * @param int $cur_id
+     * @param string|null $date
      * @return array
      */
     public function getCurrencyRate(int $cur_id = ZERO, $date = null): array
     {
         $path = 'rates';
         if ($cur_id !== ZERO) $path .= '/' . $cur_id;
-
-        if (!is_null($date)) $path .= '?ondate=' . $date;
+        if (!is_null($date)) $path .= '?ondate=' . $this->parseDate($date);
 
         $this->send($path);
 
@@ -90,11 +95,7 @@ class Bank
             $this->result = $this->response->json();
         }
         if ($this->response->failed()) {
-            $this->errors = array_merge($this->errors, [
-                [
-                    'code' => $this->response->status(),
-                ]
-            ]);
+            $this->setErrors(['code' => $this->response->status()]);
         }
 
         return $this->result;
@@ -109,11 +110,16 @@ class Bank
         try {
             $this->response = Http::retry(1, 5)->baseUrl(self::HOST)->get($path);
         } catch (\Exception $exception) {
-            $this->errors = array_merge($this->errors, [
-                [
-                    'exception' => $exception,
-                ]
-            ]);
+            $this->setErrors(['exception' => $exception]);
         }
+    }
+
+    /**
+     * @param $date
+     * @return string
+     */
+    protected function parseDate($date)
+    {
+        return Carbon::parse($date)->format("Y-m-d");
     }
 }
