@@ -19,6 +19,10 @@ class BankServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/bank.php' => config_path('bank.php'),
         ], 'config');
+
+        $this->app->singleton(Errors::class, function (){
+            return Errors::getInstance();
+        });
     }
 
 
