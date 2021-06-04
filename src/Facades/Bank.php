@@ -3,7 +3,6 @@
 namespace Kaswell\Bank\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use phpDocumentor\Reflection\Types\Static_;
 
 /**
  * Class Bank
