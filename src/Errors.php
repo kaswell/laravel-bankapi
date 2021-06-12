@@ -41,7 +41,7 @@ class Errors
     private function __construct()
     {
         if (is_null(static::$instance) || !(static::$instance instanceof Errors)) {
-            static::$instance = new static;
+            self::$instance = new Errors();
         }
     }
 
