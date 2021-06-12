@@ -16,7 +16,7 @@ class Bank
     /**
      * @var array $result
      */
-    private $result = EMPTY_ARRAY;
+    private $result = [];
 
     /**
      * @var Errors $errors

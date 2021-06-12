@@ -48,7 +48,7 @@ class Errors
     /**
      * @var array
      */
-    private $errors = EMPTY_ARRAY;
+    private $errors = [];
 
 
     /**

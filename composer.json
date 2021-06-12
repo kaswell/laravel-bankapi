@@ -26,10 +26,7 @@
   "autoload": {
     "psr-4": {
       "Kaswell\\Bank\\": "src/"
-    },
-    "files": [
-      "src/constants.php"
-    ]
+    }
   },
   "prefer-stable": true,
   "minimum-stability": "dev",
