@@ -27,23 +27,13 @@ class Errors
     /**
      * @return void
      */
-    private function __clone()
-    {
-        if (is_null(static::$instance) || !(static::$instance instanceof Errors)) {
-            static::$instance = new static;
-        }
-    }
+    private function __clone(){}
 
     /**
      * Errors constructor.
      * @return void
      */
-    private function __construct()
-    {
-        if (is_null(static::$instance) || !(static::$instance instanceof Errors)) {
-            self::$instance = new Errors();
-        }
-    }
+    private function __construct(){}
 
     /**
      * @var array
